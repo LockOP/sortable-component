@@ -29,7 +29,7 @@ export default function ReactSortable({ refresh, list }: any) {
     newListDisplayRef.current.textContent = JSON.stringify(emptyArray);
     localStorage.setItem("list", JSON.stringify(emptyArray));
   }
-//
+  //
   useEffect(() => {
     const draggable = document.querySelectorAll(".draggable");
 
