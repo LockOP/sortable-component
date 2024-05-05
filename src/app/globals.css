@@ -9,5 +9,11 @@
   .dragging {
     opacity: 1;
     background-color: aqua;
+    scale: 0.95;
+  }
+  .dragging-container {
+    opacity: 1;
+    background-color: cadetblue;
+    scale: 0.95;
   }
 }

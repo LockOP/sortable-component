@@ -16,6 +16,12 @@ export default function Home() {
       { key: 7, data: 7 },
       { key: 8, data: 8 },
     ],
+    [
+      { key: 9, data: 9 },
+      { key: 10, data: 10 },
+      { key: 11, data: 11 },
+      { key: 12, data: 12 },
+    ],
   ];
 
   let [storageList, setStorageList] = useState<any>([]);
