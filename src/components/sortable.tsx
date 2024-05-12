@@ -37,9 +37,9 @@ export default function ReactSortable({ refresh, list }: any) {
       ".draggable-container-handle"
     );
 
-    const draggableContainers = document.querySelectorAll(
-      ".draggable-container"
-    );
+    // const draggableContainers = document.querySelectorAll(
+    //   ".draggable-container"
+    // );
 
     draggableHandles.forEach((handle) => {
       handle.addEventListener("dragstart", (e) => {
@@ -61,16 +61,32 @@ export default function ReactSortable({ refresh, list }: any) {
     });
 
     draggableContainerHandles.forEach((handle) => {
+      // handle.addEventListener("mouseup", (e) => {
+      //   const draggable = handle.parentElement;
+      //   if (draggable) {
+      //     draggable
+      //       .querySelectorAll(".draggable")
+      //       .forEach((item) => {
+      //         item.classList.toggle("max-h-fit");
+      //         item.classList.toggle("max-h-0");
+      //         item.classList.toggle("border");
+      //       });
+      //   }
+
+      //   // handle.classList.toggle("max-h-12");
+      // });
+
       handle.addEventListener("dragstart", (e) => {
         // Start dragging from the draggable-handle element
         const draggable = handle.parentElement;
         if (draggable) {
-        //   draggableContainers.forEach((container) => {
-        //     container.classList.remove("h-max");
-        //     container.classList.add("h-20");
-        //     container.classList.add("overflow-clip");
-        //   });
           draggable.classList.add("dragging-container");
+
+          // draggable.querySelectorAll(".draggable").forEach((item) => {
+          //   item.classList.remove("max-h-fit");
+          //   item.classList.add("max-h-0");
+          //   item.classList.remove("border");
+          // });
         }
       });
 
@@ -78,12 +94,13 @@ export default function ReactSortable({ refresh, list }: any) {
         // End dragging
         const draggable = handle.parentElement;
         if (draggable) {
-        //   draggableContainers.forEach((container) => {
-        //     container.classList.add("h-max");
-        //     container.classList.remove("h-20");
-        //     container.classList.remove("overflow-clip");
-        //   });
           draggable.classList.remove("dragging-container");
+
+          // draggable.querySelectorAll(".draggable").forEach((item) => {
+          //   item.classList.add("max-h-fit");
+          //   item.classList.remove("max-h-0");
+          //   item.classList.add("border");
+          // });
         }
         populateUpdatedList();
       });
@@ -114,12 +131,12 @@ export default function ReactSortable({ refresh, list }: any) {
           ".draggable-container:not(.dragging-container)"
         ),
       ];
-      console.log(draggableElements);
+      // console.log(draggableElements);
       return draggableElements.reduce(
         (closest, child) => {
           const box = child.getBoundingClientRect();
           const offset = y - box.top - box.height / 2;
-          console.log(offset);
+          // console.log(offset);
           if (offset < 0 && offset > closest.offset) {
             return { offset: offset, element: child };
           } else {
@@ -138,7 +155,7 @@ export default function ReactSortable({ refresh, list }: any) {
         const afterElement = getDragAfterElement2(item, e.clientY);
         const draggable = document.querySelector(".dragging-container");
 
-        console.log(item, e.clientY);
+        // console.log(item, e.clientY);
         if (item && draggable) {
           if (afterElement == null) {
             item?.appendChild(draggable!);
@@ -174,20 +191,22 @@ export default function ReactSortable({ refresh, list }: any) {
         handle.removeEventListener("dragend", () => {});
       });
 
+      draggableContainerHandles.forEach((handle) => {
+        // Remove event listeners
+        handle.removeEventListener("dragstart", () => {});
+        handle.removeEventListener("dragend", () => {});
+      });
+
+      ultimateContainer?.forEach((item) =>
+        item.removeEventListener("dragover", () => {})
+      );
+
       container?.forEach((item) =>
-        item.removeEventListener("dragover", (e: any) => {
-          e.preventDefault();
-          const afterElement = getDragAfterElement(item, e.clientY);
-          const draggable = document.querySelector(".dragging");
-          if (afterElement == null) {
-            item?.appendChild(draggable!);
-          } else {
-            item?.insertBefore(draggable!, afterElement);
-          }
-        })
+        item.removeEventListener("dragover", () => {})
       );
     };
   });
+
   return (
     <>
       <div
@@ -198,8 +217,11 @@ export default function ReactSortable({ refresh, list }: any) {
         {list?.map((item: any, index: any) => (
           <div
             key={index}
-            className="w-[50vw] h-max min-h-20 flex flex-col container ani shrink-0 pl-20 relative justify-start draggable-container"
+            className="w-[50vw] h-max min-h-12 overflow-hidden flex flex-col container ani shrink-0 pl-20 relative justify-start draggable-container"
           >
+            <div className="w-full h-12 border border-black flex items-center justify-center text-center text-[black] select-none relative shrink-0 ani">
+              {index + 1}
+            </div>
             <div
               draggable={true}
               className="absolute left-6 top-6 h-8 w-8 bg-[purple] draggable-container-handle"
@@ -209,7 +231,7 @@ export default function ReactSortable({ refresh, list }: any) {
                 draggable={false}
                 key={item.key}
                 id={item.key.toString()}
-                className="w-full h-20 border border-black flex items-center justify-center text-center text-[black] select-none draggable relative shrink-0 ani"
+                className="w-full h-12 border border-black flex items-center justify-center text-center text-[black] select-none draggable relative shrink-0 ani max-h-fit overflow-hidden group-f"
               >
                 <div
                   draggable={true}
